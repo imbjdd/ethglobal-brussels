@@ -76,7 +76,16 @@ export default function Dataset({ params }) {
       console.log('No file selected');
     }
   };
+  const basicSummary = async () => {
+    const urlParam = 'https://gateway.lighthouse.storage/ipfs/'+params.hash; 
+    const url = `http://67.207.72.8:3005/api/basic_data?url=${encodeURIComponent(urlParam)}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log(items);
 
+  }
   const handleDownload = async () => {
     const url = 'https://gateway.lighthouse.storage/ipfs/'+params.hash; 
 
@@ -129,6 +138,7 @@ export default function Dataset({ params }) {
               </TableRow>
           </TableBody>
         </Table>
+        <button onClick={basicSummary} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">See Visualization</button>
         <button onClick={handleDownload} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Download Dataset</button>
       </div>
     </main>
