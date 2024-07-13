@@ -18,6 +18,12 @@ module.exports = {
       url: `${process.env.ALCHEMY_ARBITRUM_SEPOLIA_URL}`,
       accounts: [`0x${process.env.PRIVATE_KEY_METAMASK0}`
         ],
+    },
+    calibration: {
+      url: `${process.env.CALIBRATION_NODE}`,
+      accounts: [`0x${process.env.PRIVATE_KEY_METAMASK0}`,
+                 `0x${process.env.PRIVATE_KEY_METAMASK1}`,
+      ]
     }
   },
   defaultNetwork: "hardhat",
