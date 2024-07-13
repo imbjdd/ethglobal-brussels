@@ -106,7 +106,7 @@ const basic_data_corr = async () => {
   useEffect(() => {
     getData()
     basicSummary()
-    basic_data_corr()
+    //basic_data_corr()
     pca_fun()
   }, [])
 
@@ -233,7 +233,7 @@ const basic_data_corr = async () => {
         <div className="flex items-center justify-center">
         <Image width={500}
       height={500}
-      alt="nerd data" className="h-auto" src={'data:image/png;base64, '+correlation} />
+      alt="nerd data" className="h-auto" src={`/api/api/basic_data_corr?cid=${encodeURIComponent(params.hash)}`} /> {/*{'data:image/png;base64, '+correlation} />*/}
       </div>
         <Table>
           <TableHeader>
