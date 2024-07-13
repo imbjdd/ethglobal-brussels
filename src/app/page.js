@@ -28,7 +28,7 @@ export default function Home() {
     setData(foo)
   }
   const the_graph = async() => {
-    const url = 'http://67.207.72.8:3005/api/graph'
+    const url = '/api/api/graph'
     const response = await fetch(url);
     console.log(response)
     if (!response.ok) {

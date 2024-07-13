@@ -57,7 +57,7 @@ export default function Dataset({ params }) {
   const pca_fun = async() => {
     console.log('start')
     const cid = params.hash; 
-    const url = `http://67.207.72.8:3005/api/pca?cid=${encodeURIComponent(cid)}`;
+    const url = `/api/api/pca?cid=${encodeURIComponent(cid)}`;
     // const url = `http://127.0.0.1:5000/api/basic_data`;
     // const url = `http://127.0.0.1:5000/api/`
     const response = await fetch(url);
@@ -72,7 +72,7 @@ export default function Dataset({ params }) {
 
   const basicSummary = async () => {
     const cid = params.hash; 
-    const url = `http://67.207.72.8:3005/api/basic_data?cid=${encodeURIComponent(cid)}`;
+    const url = `/api/api/basic_data?cid=${encodeURIComponent(cid)}`;
     // const url = `http://127.0.0.1:5000/api/basic_data`;
     // const url = `http://127.0.0.1:5000/api/`
     const response = await fetch(url);
@@ -90,7 +90,7 @@ export default function Dataset({ params }) {
 
 const basic_data_corr = async () => {
     const cid = params.hash; 
-    const url = `http://67.207.72.8:3005/api/basic_data_corr?cid=${encodeURIComponent(cid)}`;
+    const url = `/api/api/basic_data_corr?cid=${encodeURIComponent(cid)}`;
     // const url = `http://127.0.0.1:5000/api/basic_data`;
     // const url = `http://127.0.0.1:5000/api/`
     const response = await fetch(url);
