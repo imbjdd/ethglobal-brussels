@@ -12,12 +12,10 @@ async function main() {
 
   console.log("Deploying contracts with the account:", await deployer.getAddress());
 
-  const time = 1720861730;
+  const Dataset = await ethers.deployContract("DatasetContract")
+  const dataset = await Dataset.waitForDeployment();
 
-  const Lock = await ethers.deployContract("Lock", [time])
-  const lock = await Lock.waitForDeployment();
-
-  console.log("Lock contract deployed at: ", lock)
+  console.log("dataset contract deployed at: ", dataset.target)
 
 }
 
