@@ -2,20 +2,7 @@
 
 import Image from "next/image";
 import Navbar from '@/components/Navbar';
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
 import {helloWorld} from "@/lib/dataset"
-
-import axios from 'axios'
-
 import {getfilePrice, getApiKey, uploadFile} from "@/lib/lithouse"
 
  import { useState, useEffect } from 'react';
@@ -32,12 +19,20 @@ export default function Dataset() {
   const [file, setFile] = useState(null);
   const [fileContent, setFileContent] = useState('');
   const [hashID, setHashID] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   const { address, isConnected } = useAccount();
-  console.log('oui')
-  console.log('keykey ', address)
 
   const { data, error, signMessageAsync } = useSignMessage({});
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  }
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  }
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -78,31 +73,8 @@ export default function Dataset() {
     })
   }
  
-  async function onSubmit(data) {
-    //const foo = await getfilePrice(file.size);
-    //console.log(foo)
-
-    const utf16Decoder = new TextDecoder('UTF-16')
-    const foobar = utf16Decoder.decode(Buffer.from(fileContent))
-
-    console.log(foobar)
-
-    const key = await getApiKey()
-    console.log('API KEY ', key)
-    //uploadFile(file, key)
-
-
-
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify({name:file.name,size:file.size/*, price: Number(foo)*/}, null, 2)}</code>
-        </pre>
-      ),
-    })
-
-
+  async function onSubmit() {
+    // hash, name, description
   }
  
   return (
@@ -116,11 +88,11 @@ export default function Dataset() {
       <div className="flex flex-wrap px-24 py-12 gap-4">
         <div className="grid w-full max-w-sm items-center gap-4">
           <Label htmlFor="name">Name of the dataset</Label>
-          <Input type="text" id="name" placeholder="Name" />
+          <Input onChange={handleNameChange} type="text" id="name" placeholder="Name" />
         </div>
         <div className="grid w-full max-w-sm items-center gap-4">
           <Label htmlFor="name">Description of the dataset</Label>
-          <Input type="text" id="description" placeholder="Description" />
+          <Input onChange={handleDescriptionChange} type="text" id="description" placeholder="Description" />
         </div>
         <div className="grid w-full max-w-sm items-center gap-4">
           <Label htmlFor="picture">Dataset {hashID}</Label>
