@@ -182,11 +182,11 @@ const basic_data_corr = async () => {
   }
 
   return (
-    <main className="bg-neutral-100 min-h-screen w-full">
-      <div className="bg-pink-300 flex flex-col px-24 py-6 min-h-80">
+    <main className="bg-white min-h-screen w-full">
+      <div className="bg-white flex flex-col px-24 pt-6">
         <Navbar className="grow-0" />
-        <div className="h-full grow flex flex-col justify-center">
-          <h1 className="text-6xl font-bold">Dataset: {dataMeta.name}</h1>
+        <div className="h-full grow w-3/5 py-20 gap-4 flex flex-col justify-center">
+          <h1 className="text-7xl font-bold">Dataset: {dataMeta.name}</h1>
           <p className="text-sm"><button onClick={copy}>Copy hash</button></p>
         </div>
       </div>
