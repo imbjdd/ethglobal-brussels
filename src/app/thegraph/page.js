@@ -60,7 +60,6 @@ export default function Home() {
   }, [])
 
   async function submitChange() {
-    alert(search)
     const url = '/api/api/graph?query='+search
     const response = await fetch(url);
     console.log(response)
@@ -87,7 +86,7 @@ export default function Home() {
       </div>
       <div className="flex flex-wrap px-24 gap-4">
         <div className="flex w-full max-w-sm items-center space-x-2">
-          <Input onChange={handleSearchChange} type="text" placeholder="Text" />
+          <Input onChange={handleSearchChange} type="text" placeholder="amountUSD>0" />
           <Button onClick={submitChange}>Search</Button>
         </div>
         {JSON.stringify(dataa) != '{}' && (
