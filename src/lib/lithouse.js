@@ -97,8 +97,28 @@ const uploadFile = async(file, publicKey, signMessageAsync) =>{
     return output.data.Hash
 }
 
+const fileInfo = async(cid) => {
+  /*
+    @param {string} cid - cid of file.
+  */
+  const fileInfo = await lighthouse.getFileInfo(cid)
+  return fileInfo
+  /* Sample Response
+    {
+      data: {
+        fileSizeInBytes: '95077',
+        cid: 'QmeMsykMDyD76zpAbinCy1cjb1KL6CVNBfB44am15U1XHh',
+        encryption: false,
+        fileName: 'itachi.jpg',
+        mimeType: 'image/jpeg',
+        txHash: ''
+      }
+    }
+  */
+}
 
-export {getfilePrice, fileUploadTest, getApiKey, uploadFile}
+
+export {getfilePrice, fileUploadTest, getApiKey, uploadFile, fileInfo}
 
 /*
 

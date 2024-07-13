@@ -16,7 +16,7 @@ import {helloWorld} from "@/lib/dataset"
 
 import axios from 'axios'
 
-import {getfilePrice, getApiKey, uploadFile} from "@/lib/lithouse"
+import {getfilePrice, getApiKey, fileInfo} from "@/lib/lithouse"
 
  import { useState, useEffect } from 'react';
  
@@ -27,15 +27,38 @@ import { toast } from "@/components/ui/use-toast"
 import { Label } from "@/components/ui/label"
 
 import { useAccount, useConnect, useSignMessage } from 'wagmi';
- 
-export default function Dataset() {
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table" 
+
+export default function Dataset({ params }) {
   const [file, setFile] = useState(null);
   const [fileContent, setFileContent] = useState('');
   const [hashID, setHashID] = useState('');
+  const [dataset, setDataset] = useState('');
 
   const { address, isConnected } = useAccount();
   console.log('oui')
   console.log('keykey ', address)
+
+  async function getData() {
+    const data = (await fileInfo(params.hash)).data
+    console.log('ok')
+    console.log(data)
+    setDataset(data)
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   const { data, error, signMessageAsync } = useSignMessage({});
 
@@ -64,69 +87,59 @@ export default function Dataset() {
     }
   };
 
-  const manageSubmit = async (e) => {
-    const hash = await uploadFile(e.target.files, address, signMessageAsync)
-    setHashID(hash)
-    //signMessage({message: 'hello world'})
-    toast({
-      title: "Your file was uploaded",
-      description: (
-        <div className="mt-2 rounded-md w-full">
-          <p>Hash ID : <a href={"https://gateway.lighthouse.storage/ipfs/"+hash}>{hash}</a></p>
-        </div>
-      ),
-    })
-  }
- 
-  async function onSubmit(data) {
-    //const foo = await getfilePrice(file.size);
-    //console.log(foo)
+  const handleDownload = async () => {
+    const url = 'https://gateway.lighthouse.storage/ipfs/'+params.hash; 
 
-    const utf16Decoder = new TextDecoder('UTF-16')
-    const foobar = utf16Decoder.decode(Buffer.from(fileContent))
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-    console.log(foobar)
-
-    const key = await getApiKey()
-    console.log('API KEY ', key)
-    //uploadFile(file, key)
+      const blob = await response.blob();
+      const urlObject = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = urlObject;
+      link.download = dataset.fileName
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(urlObject);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
 
 
 
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify({name:file.name,size:file.size/*, price: Number(foo)*/}, null, 2)}</code>
-        </pre>
-      ),
-    })
-
-
-  }
- 
   return (
     <main className="bg-neutral-100 min-h-screen w-full">
       <div className="bg-pink-300 flex flex-col px-24 py-6 min-h-80">
         <Navbar className="grow-0" />
         <div className="h-full grow flex flex-col justify-center">
           <h1 className="text-6xl font-bold">View dataset</h1>
+          <p className="text-lg">{ params.hash }</p>
         </div>
       </div>
       <div className="flex flex-wrap px-24 py-12 gap-4">
-        <div className="grid w-full max-w-sm items-center gap-4">
-          <Label htmlFor="name">Name of the dataset</Label>
-          <Input type="text" id="name" placeholder="Name" />
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-4">
-          <Label htmlFor="name">Description of the dataset</Label>
-          <Input type="text" id="description" placeholder="Description" />
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-4">
-          <Label htmlFor="picture">Dataset {hashID}</Label>
-          <Input /*onChange={handleFileChange}*/ onChange={e=>manageSubmit(e)} id="picture" type="file" />
-        </div>
-        <Button onClick={onSubmit} type="submit">Submit</Button>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>File name</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>cid</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+              <TableRow>
+                <TableCell>{dataset.fileName}</TableCell>
+                <TableCell>{dataset.fileSizeInBytes}</TableCell>
+                <TableCell>{dataset.cid}</TableCell>
+              </TableRow>
+          </TableBody>
+        </Table>
+        <button onClick={handleDownload} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Download Dataset</button>
       </div>
     </main>
   );
