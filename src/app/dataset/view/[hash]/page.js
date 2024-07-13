@@ -77,9 +77,12 @@ export default function Dataset({ params }) {
     }
   };
   const basicSummary = async () => {
-    const urlParam = 'https://gateway.lighthouse.storage/ipfs/'+params.hash; 
-    const url = `http://67.207.72.8:3005/api/basic_data?url=${encodeURIComponent(urlParam)}`;
+    const cid = params.hash; 
+    const url = `http://127.0.0.1:5000/api/basic_data?cid=${encodeURIComponent(cid)}`;
+    // const url = `http://127.0.0.1:5000/api/basic_data`;
+    // const url = `http://127.0.0.1:5000/api/`
     const response = await fetch(url);
+    console.log(response)
     if (!response.ok) {
       throw new Error('Network response was not ok');}
     const items = await response.json();
