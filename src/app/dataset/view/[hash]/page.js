@@ -9,7 +9,8 @@ import axios from 'axios'
 import {getfilePrice, getApiKey, fileInfo} from "@/lib/lithouse"
 
  import { useState, useEffect } from 'react';
- 
+ import {getOneDocument} from "@/lib/database"
+
 import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
@@ -34,6 +35,7 @@ export default function Dataset({ params }) {
   const [fileContent, setFileContent] = useState('');
   const [hashID, setHashID] = useState('');
   const [dataset, setDataset] = useState('');
+  const [dataMeta, setDatasetMeta] = useState('');
 
   const { address, isConnected } = useAccount();
   console.log('oui')
@@ -44,6 +46,9 @@ export default function Dataset({ params }) {
     console.log('ok')
     console.log(data)
     setDataset(data)
+    const foo = await getOneDocument(params.hash)
+    setDatasetMeta(foo)
+    console.log(foo)
   }
 
   useEffect(() => {
@@ -113,15 +118,17 @@ export default function Dataset({ params }) {
     }
   };
 
-
+  function copy() {
+    navigator.clipboard.writeText(params.hash)
+  }
 
   return (
     <main className="bg-neutral-100 min-h-screen w-full">
       <div className="bg-pink-300 flex flex-col px-24 py-6 min-h-80">
         <Navbar className="grow-0" />
         <div className="h-full grow flex flex-col justify-center">
-          <h1 className="text-6xl font-bold">View dataset</h1>
-          <p className="text-lg">{ params.hash }</p>
+          <h1 className="text-6xl font-bold">Dataset: {dataMeta.name}</h1>
+          <p className="text-sm"><button onClick={copy}>Copy hash</button></p>
         </div>
       </div>
       <div className="flex flex-wrap px-24 py-12 gap-4">
@@ -141,6 +148,7 @@ export default function Dataset({ params }) {
               </TableRow>
           </TableBody>
         </Table>
+        <p className="italic">{dataMeta.description}</p>
         <button onClick={basicSummary} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">See Visualization</button>
         <button onClick={handleDownload} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Download Dataset</button>
       </div>
