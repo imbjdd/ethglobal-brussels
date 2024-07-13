@@ -27,7 +27,17 @@ export default function Home() {
     console.log(foo)
     setData(foo)
   }
+  const the_graph = async() => {
+    const url = 'http://67.207.72.8:3005/api/graph'
+    const response = await fetch(url);
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log(items);
 
+
+  }
   useEffect(() => {
     getData()
   }, [])
@@ -42,6 +52,9 @@ export default function Home() {
           <h1 className="text-6xl font-bold">Unlock the profitability of your data</h1>
           <p>This platform allows you to create and to buy datasets. AI analysis of datasets is integrated into the application.</p>
         </div>
+      </div>
+      <div>
+        <button onClick={the_graph}></button>
       </div>
       <div className="flex flex-wrap px-24 py-12 gap-4">
       {datasets.map((dataset, index) => (
