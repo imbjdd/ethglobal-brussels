@@ -32,6 +32,9 @@ const Navbar = () => {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <w3m-button />
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
