@@ -48,7 +48,7 @@ export default function Home() {
         <div key={index} className="w-1/3 grow rounded-lg flex flex-col gap-4 bg-neutral-200 p-4">
           <p className="font-bold text-lg">{dataset.name}</p>
           <p className="grow">{dataset.description.substring(0, 200)}...</p>
-          <button className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg font-bold">See more</button>
+          <a href={"/dataset/view/"+dataset.cid} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg font-bold">See more</a>
         </div>
       ))}
       </div>
