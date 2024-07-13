@@ -5,7 +5,9 @@ import Navbar from '@/components/Navbar';
 import {helloWorld} from "@/lib/dataset"
 import {getfilePrice, getApiKey, uploadFile} from "@/lib/lithouse"
 
- import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+
+import {insertDocument} from "@/lib/database"
  
 import { Button } from "@/components/ui/button"
 
@@ -75,6 +77,7 @@ export default function Dataset() {
  
   async function onSubmit() {
     // hash, name, description
+    insertDocument(name, description, hashID)
   }
  
   return (
