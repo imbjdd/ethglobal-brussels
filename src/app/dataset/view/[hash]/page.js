@@ -76,6 +76,19 @@ export default function Dataset({ params }) {
       console.log('No file selected');
     }
   };
+const basic_data_corr = async () => {
+    const cid = params.hash; 
+    const url = `http://127.0.0.1:5000/api/basic_data_corr?cid=${encodeURIComponent(cid)}`;
+    // const url = `http://127.0.0.1:5000/api/basic_data`;
+    // const url = `http://127.0.0.1:5000/api/`
+    const response = await fetch(url);
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log(items);
+
+  }
   const basicSummary = async () => {
     const cid = params.hash; 
     const url = `http://127.0.0.1:5000/api/basic_data?cid=${encodeURIComponent(cid)}`;
@@ -103,6 +116,21 @@ export default function Dataset({ params }) {
 
 
   }
+// IGNORE 2dkMEANS STILL IN PROGRESS, HARDER TO SETUP
+  const twodkmeans = async () => {
+    const cid = params.hash; 
+    const url = `http://127.0.0.1:5000/api/2dkmeans?cid=${encodeURIComponent(cid)}`;
+    // const url = `http://127.0.0.1:5000/api/basic_data`;
+    // const url = `http://127.0.0.1:5000/api/`
+    const response = await fetch(url);
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log(items);
+
+  }
+
   const handleDownload = async () => {
     const url = 'https://gateway.lighthouse.storage/ipfs/'+params.hash; 
 
@@ -156,6 +184,8 @@ export default function Dataset({ params }) {
           </TableBody>
         </Table>
         <button onClick={basicSummary} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">See Visualization</button>
+        <button onClick={basic_data_corr} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Show Correlation Matrix</button>
+        {/* <button onClick={twodkmeans} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Show K-Means Clustering</button> */}
         <button onClick={pca} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">See PCA Visualization</button>
         <button onClick={handleDownload} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Download Dataset</button>
       </div>
