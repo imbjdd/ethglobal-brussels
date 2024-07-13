@@ -12,7 +12,6 @@ import {getfilePrice, getApiKey, fileInfo} from "@/lib/lithouse"
  import {getOneDocument} from "@/lib/database"
 
 import { Button } from "@/components/ui/button"
-
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Label } from "@/components/ui/label"
@@ -36,6 +35,10 @@ export default function Dataset({ params }) {
   const [hashID, setHashID] = useState('');
   const [dataset, setDataset] = useState('');
   const [dataMeta, setDatasetMeta] = useState('');
+  const [summary, setSummary] = useState({});
+  const [keys, setKeys] = useState([])
+  const [correlation, setCorrelation] = useState('')
+  const [pca, setPca] = useState([])
 
   const { address, isConnected } = useAccount();
   console.log('oui')
@@ -51,11 +54,64 @@ export default function Dataset({ params }) {
     console.log(foo)
   }
 
+  const pca_fun = async() => {
+    console.log('start')
+    const cid = params.hash; 
+    const url = `http://67.207.72.8:3005/api/pca?cid=${encodeURIComponent(cid)}`;
+    // const url = `http://127.0.0.1:5000/api/basic_data`;
+    // const url = `http://127.0.0.1:5000/api/`
+    const response = await fetch(url);
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log('terra')
+    console.log(items);
+    setPca(items["Explained Variance Ratio"])
+  }
+
+  const basicSummary = async () => {
+    const cid = params.hash; 
+    const url = `http://67.207.72.8:3005/api/basic_data?cid=${encodeURIComponent(cid)}`;
+    // const url = `http://127.0.0.1:5000/api/basic_data`;
+    // const url = `http://127.0.0.1:5000/api/`
+    const response = await fetch(url);
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log(items);
+    console.log('ok')
+    setSummary(items.summary)
+    console.log('non')
+    console.log(summary)
+    setKeys(Object.keys(items.summary))
+  }
+
+const basic_data_corr = async () => {
+    const cid = params.hash; 
+    const url = `http://67.207.72.8:3005/api/basic_data_corr?cid=${encodeURIComponent(cid)}`;
+    // const url = `http://127.0.0.1:5000/api/basic_data`;
+    // const url = `http://127.0.0.1:5000/api/`
+    const response = await fetch(url);
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');}
+    const items = await response.json();
+    console.log(items);
+    setCorrelation(items.image)
+
+  }
+
   useEffect(() => {
     getData()
+    basicSummary()
+    basic_data_corr()
+    pca_fun()
   }, [])
 
   const { data, error, signMessageAsync } = useSignMessage({});
+
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -81,46 +137,7 @@ export default function Dataset({ params }) {
       console.log('No file selected');
     }
   };
-const basic_data_corr = async () => {
-    const cid = params.hash; 
-    const url = `http://127.0.0.1:5000/api/basic_data_corr?cid=${encodeURIComponent(cid)}`;
-    // const url = `http://127.0.0.1:5000/api/basic_data`;
-    // const url = `http://127.0.0.1:5000/api/`
-    const response = await fetch(url);
-    console.log(response)
-    if (!response.ok) {
-      throw new Error('Network response was not ok');}
-    const items = await response.json();
-    console.log(items);
 
-  }
-  const basicSummary = async () => {
-    const cid = params.hash; 
-    const url = `http://127.0.0.1:5000/api/basic_data?cid=${encodeURIComponent(cid)}`;
-    // const url = `http://127.0.0.1:5000/api/basic_data`;
-    // const url = `http://127.0.0.1:5000/api/`
-    const response = await fetch(url);
-    console.log(response)
-    if (!response.ok) {
-      throw new Error('Network response was not ok');}
-    const items = await response.json();
-    console.log(items);
-
-  }
-  const pca = async() => {
-    const cid = params.hash; 
-    const url = `http://127.0.0.1:5000/api/pca?cid=${encodeURIComponent(cid)}`;
-    // const url = `http://127.0.0.1:5000/api/basic_data`;
-    // const url = `http://127.0.0.1:5000/api/`
-    const response = await fetch(url);
-    console.log(response)
-    if (!response.ok) {
-      throw new Error('Network response was not ok');}
-    const items = await response.json();
-    console.log(items);
-
-
-  }
 // IGNORE 2dkMEANS STILL IN PROGRESS, HARDER TO SETUP
   const twodkmeans = async () => {
     const cid = params.hash; 
@@ -173,7 +190,8 @@ const basic_data_corr = async () => {
           <p className="text-sm"><button onClick={copy}>Copy hash</button></p>
         </div>
       </div>
-      <div className="flex flex-wrap px-24 py-12 gap-4">
+      <div className="flex flex-col gap-12 flex-wrap px-24 py-12 gap-4">
+        <button onClick={handleDownload} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Download Dataset</button>
         <Table>
           <TableHeader>
             <TableRow>
@@ -191,11 +209,48 @@ const basic_data_corr = async () => {
           </TableBody>
         </Table>
         <p className="italic">{dataMeta.description}</p>
-        <button onClick={basicSummary} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">See Visualization</button>
-        <button onClick={basic_data_corr} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Show Correlation Matrix</button>
         {/* <button onClick={twodkmeans} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Show K-Means Clustering</button> */}
-        <button onClick={pca} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">See PCA Visualization</button>
-        <button onClick={handleDownload} className="px-6 py-2 bg-blue-400 hover:bg-blue-300 rounded-lg text-black">Download Dataset</button>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead></TableHead>
+              {keys.map((key,index) => (
+                  <TableHead key={index}>{key}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {['25%', '50%', '75%'].map((element, ind) => (
+              <TableRow key={ind}>
+                <TableCell><p className="font-bold">{element}</p></TableCell>
+                {keys.map((key,index) => (
+                  <TableCell key={ind+'_'+index}>{summary[key][element]}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <div className="flex items-center justify-center">
+        <Image width={500}
+      height={500}
+      alt="nerd data" className="h-auto" src={'data:image/png;base64, '+correlation} />
+      </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>PC1</TableHead>
+              <TableHead>PC2</TableHead>
+              <TableHead>PC3</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+              <TableRow>
+                <TableCell>{pca[0]}</TableCell>
+                <TableCell>{pca[1]}</TableCell>
+                <TableCell>{pca[2]}</TableCell>
+              </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </main>
   );
