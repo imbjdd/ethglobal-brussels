@@ -54,7 +54,7 @@ export default function Home() {
         </div>
       </div>
       <div>
-        <button onClick={the_graph}></button>
+        <button onClick={the_graph}>the graph</button>
       </div>
       <div className="flex flex-wrap px-24 py-12 gap-4">
       {datasets.map((dataset, index) => (

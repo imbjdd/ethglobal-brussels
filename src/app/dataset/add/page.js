@@ -78,6 +78,14 @@ export default function Dataset() {
   async function onSubmit() {
     // hash, name, description
     insertDocument(name, description, hashID)
+    toast({
+      title: "Your dataset was uploaded",
+      description: (
+        <div className="mt-2 rounded-md w-full">
+          <p>Congratulation!</p>
+        </div>
+      ),
+    })
   }
  
   return (
