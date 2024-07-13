@@ -94,6 +94,7 @@ const uploadFile = async(file, publicKey, signMessageAsync) =>{
   */
 
     console.log('Visit at https://gateway.lighthouse.storage/ipfs/' + output.data.Hash)
+    return output.data.Hash
 }
 
 

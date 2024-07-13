@@ -110,7 +110,7 @@ export default function Dataset() {
       <div className="bg-pink-300 flex flex-col px-24 py-6 min-h-80">
         <Navbar className="grow-0" />
         <div className="h-full grow flex flex-col justify-center">
-          <h1 className="text-6xl font-bold">Add a dataset</h1>
+          <h1 className="text-6xl font-bold">View dataset</h1>
         </div>
       </div>
       <div className="flex flex-wrap px-24 py-12 gap-4">

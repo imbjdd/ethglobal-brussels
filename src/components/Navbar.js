@@ -16,7 +16,7 @@ import {
 
 const Navbar = () => {
   return (
-    <NavigationMenu>
+    <NavigationMenu className="grow-0">
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
