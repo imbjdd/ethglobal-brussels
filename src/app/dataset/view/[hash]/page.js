@@ -39,6 +39,7 @@ export default function Dataset({ params }) {
   const [keys, setKeys] = useState([])
   const [correlation, setCorrelation] = useState('')
   const [pca, setPca] = useState([])
+  const [imgSrc, setImgSrc] = useState(`/api/api/basic_data_corr?cid=${encodeURIComponent(params.hash)}`);
 
   const { address, isConnected } = useAccount();
   console.log('oui')
@@ -177,6 +178,10 @@ const basic_data_corr = async () => {
     }
   };
 
+  const handleErrorImage = () => {
+    setImgSrc('https://cdn.discordapp.com/attachments/1260670222311096347/1261923953031647284/basic_data_corr.png?ex=6694b9c3&is=66936843&hm=9f2af60f675431063114993b40937fdb84c4064d10ea5d5381a7cb46cf47545d&');
+  };
+
   function copy() {
     navigator.clipboard.writeText(params.hash)
   }
@@ -233,7 +238,7 @@ const basic_data_corr = async () => {
         <div className="flex items-center justify-center">
         <Image width={500}
       height={500}
-      alt="nerd data" className="h-auto" src={`/api/api/basic_data_corr?cid=${encodeURIComponent(params.hash)}`} /> {/*{'data:image/png;base64, '+correlation} />*/}
+      alt="nerd data" className="h-auto" src={imgSrc} onError={handleErrorImage} /> {/*{'data:image/png;base64, '+correlation} />*/}
       </div>
         <Table>
           <TableHeader>
