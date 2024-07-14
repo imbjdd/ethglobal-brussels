@@ -54,7 +54,7 @@ export default function Home() {
       <div>
         {/*<button onClick={the_graph}>the graph</button>*/}
       </div>
-      <div className="flex flex-wrap px-24 gap-4">
+      <div className="flex flex-wrap px-24 gap-4 pb-12">
       {datasets.map((dataset, index) => (
         <div key={index} className="w-1/3 grow rounded-lg flex flex-col gap-4 bg-orange-300 even:bg-blue-300 p-4">
           <p className="font-bold text-2xl">{dataset.name}</p>
