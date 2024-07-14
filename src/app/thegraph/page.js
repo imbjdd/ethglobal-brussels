@@ -29,8 +29,14 @@ import { useState, useEffect } from 'react';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import ExampleComponent from "../../components/ui/graph"
+import WrappedExampleComponent from "../../components/ui/graph";
+
  
 export default function Home() {
+
+  ExampleComponent()
+
   const [datasets, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [dataa, setDataa] = useState({});
@@ -86,8 +92,9 @@ export default function Home() {
       </div>
       <div className="flex flex-wrap px-24 gap-4">
         <div className="flex w-full max-w-sm items-center space-x-2">
-          <Input onChange={handleSearchChange} type="text" placeholder="amountUSD>0" />
-          <Button onClick={submitChange}>Search</Button>
+          {/* <Input onChange={handleSearchChange} type="text" placeholder="amountUSD>0" /> */}
+          {/* <Button onClick={() => ExampleComponent()}>Query</Button> */}
+          <WrappedExampleComponent/>
         </div>
         {JSON.stringify(dataa) != '{}' && (
         <Table>

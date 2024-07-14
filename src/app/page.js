@@ -20,8 +20,6 @@ import {getAllDocuments} from "@/lib/database"
 export default function Home() {
   const [datasets, setData] = useState([]);
 
-  ExampleComponent()
-
   async function getData() {
     const foo = await getAllDocuments()
     console.log(foo)
